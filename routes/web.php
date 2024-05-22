@@ -1,55 +1,20 @@
 <?php
 
-use Illuminate\Support\Arr;
+
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobController;
 
-Route::get('/', function () {
-    return view('home');
-});
 
-Route::get('/jobs', function () {
-    return view('jobs', [
-        'jobs' => [
-            [
-                'id' => 1,
-                'title' => 'Director',
-                'salary' => '$50000',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Programmer',
-                'salary' => '$10000',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Teacher',
-                'salary' => '$40000',
-            ]
-        ]
-    ]);
-});
+Route::view('/', 'home');
+Route::view('/contact', 'contact');
 
-Route::get('/jobs/{id}', function ($id) {
-    $jobs = [
-        [
-            'id' => 1,
-            'title' => 'Director',
-            'salary' => '$50000',
-        ],
-        [
-            'id' => 2,
-            'title' => 'Programmer',
-            'salary' => '$10000',
-        ],
-        [
-            'id' => 3,
-            'title' => 'Teacher',
-            'salary' => '$40000',
-        ]];
-    $job = Arr::first($jobs, fn($job) => $job['id'] == $id);
-    return view('job', ['job' => $job]);
-});
+Route::resource('jobs',JobController::class);
 
-Route::get('/contact', function () {
-    return view('contact');
-});
+Route::get('/register', [RegisteredUserController::class, 'create']);
+Route::post('/register', [RegisteredUserController::class, 'store']);
+
+Route::get('/login', [SessionController::class, 'create']);
+Route::post('/login', [SessionController::class, 'store']);
+
